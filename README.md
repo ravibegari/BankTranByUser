@@ -2,7 +2,7 @@
 
 # BankTranByUserPOC using Spring Boot + Spring Security + JPA+Hibernate+REST API 
 
-1.Prerequisites:- Java 8 +Maven+MySql DataBase+sql_script.sql<br>
+1.Prerequisites:- Java 8 +Maven+MySql DataBase+scripts.sql<br>
 2.execute the queries on MySql command Line or open MySql Workbench and browse the script<br>
 by clicking on the "file' menu and click on 'Run SQL Script'.<br>
 3.Download the source code from Github.<br>
