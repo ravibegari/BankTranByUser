@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="bank_metadata")
+@Table(name="user_bank_metadata")
 public class BankMetaData {
 
 	@Id

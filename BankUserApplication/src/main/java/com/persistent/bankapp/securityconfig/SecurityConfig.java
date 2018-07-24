@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/bank/**",
             "/bank/listOfBanks",	
             "/bank/metadataOfBank",
-            "/bank/getAccount"
+            "/bank/getBankAccounts"
 
     };
 

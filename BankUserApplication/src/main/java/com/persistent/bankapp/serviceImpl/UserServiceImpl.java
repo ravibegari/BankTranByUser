@@ -1,7 +1,6 @@
 package com.persistent.bankapp.serviceImpl;
 
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,10 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.persistent.bankapp.dao.RoleDao;
 import com.persistent.bankapp.dao.UserDao;
 import com.persistent.bankapp.domain.User;
-import com.persistent.bankapp.security.UserRole;
 import com.persistent.bankapp.service.UserService;
 
 @Service
@@ -24,9 +21,7 @@ private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 	@Autowired
 	private UserDao userDao;
 	
-	@Autowired
-    private RoleDao roleDao;
-
+	
     @Autowired
     private PasswordEncoder passwordEncoder;
     
@@ -59,7 +54,7 @@ private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 	}
 
 	@Override
-	public User createUser(User user, Set<UserRole> userRoles) {
+	public User createUser(User user) {
         User localUser = userDao.findByUsername(user.getUsername());
 
         if (localUser != null) {
@@ -67,12 +62,6 @@ private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
         } else {
             String encryptedPassword = passwordEncoder.encode(user.getPassword());
             user.setPassword(encryptedPassword);
-
-            for (UserRole ur : userRoles) {
-                roleDao.save(ur.getRole());
-            }
-
-            user.getUserRoles().addAll(userRoles);
 
             localUser = userDao.save(user);
         }

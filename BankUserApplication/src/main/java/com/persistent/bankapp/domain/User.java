@@ -1,25 +1,16 @@
 package com.persistent.bankapp.domain;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.persistent.bankapp.security.Authority;
-import com.persistent.bankapp.security.UserRole;
 
 @Entity
 @Table(name="user_sign_up")
@@ -37,14 +28,7 @@ public class User  implements UserDetails{
 	    private Long   phoneNo;
 	    private boolean enabled=true;
 
-	    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	    @JsonIgnore
-	    private Set<UserRole> userRoles = new HashSet<>();
-
-	    public Set<UserRole> getUserRoles() {
-	        return userRoles;
-	    }
-
+	    
 	    public Long getUserId() {
 	        return userId;
 	    }
@@ -83,10 +67,7 @@ public class User  implements UserDetails{
 		public void setPhoneNo(Long phoneNo) {
 			this.phoneNo = phoneNo;
 		}
-	    public void setUserRoles(Set<UserRole> userRoles) {
-	        this.userRoles = userRoles;
-	    }
-
+	  
 	    public String getUsername() {
 	        return username;
 	    }
@@ -111,12 +92,6 @@ public class User  implements UserDetails{
 	   
 
 
-	    @Override
-	    public Collection<? extends GrantedAuthority> getAuthorities() {
-	        Set<GrantedAuthority> authorities = new HashSet<>();
-	        userRoles.forEach(ur -> authorities.add(new Authority(ur.getRole().getName())));
-	        return authorities;
-	    }	
 
 	    @Override
 	    public boolean isAccountNonExpired() {
@@ -140,6 +115,12 @@ public class User  implements UserDetails{
 	    public boolean isEnabled() {
 	        return enabled;
 	    }
+
+		@Override
+		public Collection<? extends GrantedAuthority> getAuthorities() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
 
 	}

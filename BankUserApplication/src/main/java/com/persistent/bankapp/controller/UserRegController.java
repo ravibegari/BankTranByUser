@@ -1,7 +1,6 @@
 package com.persistent.bankapp.controller;
 
-import java.util.HashSet;
-import java.util.Set;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,9 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.persistent.bankapp.dao.RoleDao;
 import com.persistent.bankapp.domain.User;
-import com.persistent.bankapp.security.UserRole;
 import com.persistent.bankapp.service.UserService;
 
 
@@ -24,9 +21,7 @@ public class UserRegController {
 	
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private RoleDao roleDao;
-
+	
 	@PostMapping(value="/signUpUser",produces=MediaType.APPLICATION_JSON_VALUE,consumes=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value=HttpStatus.OK)
 	public String signUpUser(@RequestBody User user) {
@@ -36,9 +31,7 @@ public class UserRegController {
 
 			sStatus="The user is already exist";
 		}else {
-			Set<UserRole> userRoles = new HashSet<>();
-			userRoles.add(new UserRole(user, roleDao.findByName("ROLE_USER")));
-			userService.createUser(user, userRoles);
+			userService.createUser(user);
 			sStatus="The User is Created Successfully";
 
 		}

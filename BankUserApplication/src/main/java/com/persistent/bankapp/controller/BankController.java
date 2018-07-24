@@ -44,7 +44,7 @@ public class BankController {
     }
 
     @RequestMapping(value = "/getMetadataOfBank", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<BankMetaData> getMetadataOfBanks(@RequestHeader(value="userName") String sUserName) {
+    public List<BankMetaData> getMetadataOfBanks(@RequestHeader(value="username") String sUserName) {
 
     	List<BankMetaData> bankMetaData = new ArrayList<BankMetaData>();
         if (userService.checkUsernameExists(sUserName)) {
@@ -55,17 +55,17 @@ public class BankController {
 
     }
 
-    @RequestMapping(value = "/getAccount", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public String getAccounts(@RequestHeader(value="userName") String sUserName,
+    @RequestMapping(value = "/getBankAccounts", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String getAccounts(@RequestHeader(value="username") String sUserName,
                               @RequestBody HashMap<String,String> bankMetaData
                               ) throws RestClientException, IOException {
 
         if (userService.checkUsernameExists(sUserName)) {
-            String baseUrl = "http://localhost:8070/bank/getAccount";
+            String baseUrl = "http://localhost:8070/bank/getBankAccounts";
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<String> response=null;
             try{
-                response=restTemplate.exchange(baseUrl,HttpMethod.POST, getHeaders(bankMetaData.get("bankId"),bankMetaData.get("Username"),bankMetaData.get("password")),String.class);
+                response=restTemplate.exchange(baseUrl,HttpMethod.POST, getHeaders(bankMetaData.get("bankId"),bankMetaData.get("bankusername"),bankMetaData.get("bankpassword")),String.class);
             }catch (Exception ex)
             {
                 System.out.println(ex);
@@ -79,7 +79,14 @@ public class BankController {
     private static HttpEntity<?> getHeaders(String bankId, String userName, String password) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("bankId", bankId);
-        headers.set("userName", userName);
+        headers.set("username", userName);
+        
+        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
+        acceptableMediaTypes.add(MediaType.TEXT_PLAIN);
+       headers.setAccept(acceptableMediaTypes);
+       headers.set("Content-Type", "application/json");
+       
         String plainClientCredentials=userName+":"+password;
         String base64ClientCredentials = new String(Base64.getEncoder().encodeToString(plainClientCredentials.getBytes()));
         headers.add("Authorization", "Basic " + base64ClientCredentials);
